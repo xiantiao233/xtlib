@@ -14,24 +14,32 @@ public class CommandRunning {
 
     public void execute(@NotNull String command) {
         String[] split = command.split(" ");
-        Runnable runnable = getRunnable(split);
+        CommandRunnable runnable = getRunnable(split);
         if (runnable != null) runnable.run();
     }
 
-    public @Nullable Runnable getRunnable(@NotNull String command) {
-        String[] split = command.split(" ");
-        return getRunnable(split);
-    }
-
-    private @Nullable Runnable getRunnable(String[] split) {
+    private @Nullable CommandRunnable getRunnable(String[] split) {
         final Set<CommandRecord> commandRecords = getLengthSame(split);
         for (CommandRecord commandRecord : commandRecords) {
             String[] recordCommand = commandRecord.getCommand();
             if (isEquals(recordCommand, split)) {
+                CommandRunnable runnable = commandRecord.getRunnable();
+                String[] args = getArgs(recordCommand, split);
+                runnable.setArgs(args);
                 return commandRecord.getRunnable();
             }
         }
         return null;
+    }
+
+    private String[] getArgs(String[] benchmarks, String[] split) {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < benchmarks.length; i++) {
+            if (benchmarks[i] == null) {
+                list.add(split[i]);
+            }
+        }
+        return list.toArray(new String[0]);
     }
 
     private boolean isEquals(String[] benchmarks, String[] split2) {
