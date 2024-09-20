@@ -21,12 +21,12 @@ public class CommandRunning {
     private @Nullable CommandRunnable getRunnable(String[] split) {
         final Set<CommandRecord> commandRecords = getLengthSame(split);
         for (CommandRecord commandRecord : commandRecords) {
-            String[] recordCommand = commandRecord.getCommand();
+            String[] recordCommand = commandRecord.command();
             if (isEquals(recordCommand, split)) {
-                CommandRunnable runnable = commandRecord.getRunnable();
+                CommandRunnable runnable = commandRecord.commandRunnable();
                 String[] args = getArgs(recordCommand, split);
                 runnable.setArgs(args);
-                return commandRecord.getRunnable();
+                return commandRecord.commandRunnable();
             }
         }
         return null;
@@ -55,7 +55,7 @@ public class CommandRunning {
     private @NotNull Set<CommandRecord> getLengthSame(String[] split) {
         Set<CommandRecord> same = new HashSet<>();
         for (CommandRecord commandRecord : commandRecords) {
-            String[] recordCommand = commandRecord.getCommand();
+            String[] recordCommand = commandRecord.command();
             if (recordCommand != null && recordCommand.length == split.length) {
                 same.add(commandRecord);
             }
